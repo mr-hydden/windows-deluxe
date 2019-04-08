@@ -1,4 +1,4 @@
-# windows-deluxe
+# Implementation and optimization of a calculation with DLX assembly code
 
 DLX assembly classwork. This program consists of two implementations of code that outputs the result of the following matrix operations:
 ```
