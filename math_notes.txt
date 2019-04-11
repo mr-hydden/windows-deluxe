@@ -13,3 +13,98 @@ M = 1/|A + B|·(A x B) + k·C
     |
     |--------------------------- k·C = ( k*cij )
     
+Por tanto:
+	- El producto A x B da como lugar una matriz L tal que L = ( lij ),
+	  donde lij es el resultado de multiplicar la fila i-ésima de A por
+	  la columna j-ésima de B. Así, se pueden calcular los elementos de
+	  L 'de uno en uno', cargando únicamente una columna de A y una fila
+	  de B.
+
+	- Por su parte, la suma de matrices A + B se puede hacer, también,
+	  componente a componente, para obtener la matriz W = ( wij ) tal
+	  que wij = aij + bij. Esto se puede hacer elemento a elemento,
+	  fila a fila, columna a columna, o según la división que mejor op-
+	  timice el cálculo en la versión final (e.g., cargar la mitad de
+	  las matrices, y luego la otra mitad, etc.)
+
+	- Para calcular el determinante, se puede ir cargando los elementos
+	  que incurren en cada producto secuencialmente, de modo tal que
+	  para calcular el producto (i+1)-ésimo se aprovechen al máximo los ele-
+	  mentos ya cargados en el producto i-ésimo. Así, por ejemplo, si
+	  hacemos la siguiente representación:
+
+		    | w11 w12 w13 |    | 0 1 2 |
+		W = | w21 w22 w23 | -> | 3 4 5 |
+		    | w31 w32 w33 |    | 6 7 8 |
+
+	  podemos representar el determinante como:
+
+	       S1    S2    S3    S4    S5    S6
+	       |     |     |     |     |     |
+	       v     v     v     v     v     v
+	|W| = 048 + 237 + 156 - 246 - 057 - 138
+               |     |     |     |     |     |-> S6 = (0,1,0,1,0,0,0,0,1)
+               |     |     |     |     |-------> S5 = (1,0,0,0,0,1,0,1,0)
+               |     |     |     |-------------> S4 = (0,0,1,0,1,0,1,0,0)
+               |     |     |-------------------> S3 = (0,1,0,0,0,1,1,0,0)
+               |     |-------------------------> S2 = (0,0,1,1,0,0,0,1,0)
+               |-------------------------------> S1 = (1,0,0,0,1,0,0,0,1)
+
+	  Se observa que para cuales quiera dos vectores, la distancia (||
+	  numero de coordenadas diferentes) es siempre dos como minimo.
+
+	  Así, para aprovechar datos ya cargados en registros, se recomienda
+	  el siguiente orden (que siempre aprovecha un dato):
+	
+			S1, S5, S3, S6, S2, S4
+
+	  de tal modo que hacemos lo siguiente
+
+		1. load S1 = 048
+		2. mult 048 and store
+		3. load S5 = 57 ;; 0 already in register
+		4. mult 058 and store
+		5. load S3 = 16 ;; 5 already in register
+		6. mul 156
+		7. load S6 = 38 ;; 1 already in register
+		8. mult 138
+		9. load S2 = 27 ;; 3 already in register
+		10. mult 237
+		11. load S4 = 46 ;; 2 already in register
+		12. mult 246
+
+	  Los 'store' los vamos haciendo de tal modo que en memoria debe
+	  resultar algo como lo siguiente (imaginemos que se almacena em-
+	  pezando por la direccion 0xA0):
+
+		0x000
+		.
+		.
+		.
+		0x00A0 | S1 |
+		0x00A1 | S2 |
+		0x00A2 | S3 |
+		0x00A3 | S4 |
+		0x00A4 | S5 |
+		0X00A5 | S6 |
+		.
+		.
+		.
+		.
+		0XFFFF
+
+	  De este modo, el cálculo final del determinante se puede hacer como:
+
+		load 0x00A0, F1
+		F1 <- add F1, 0x00A1
+		F1 <- add F1, 0x00A2
+		F1 <- add F1, 0x00A3
+		F1 <- add F1, 0x00A4
+		F1 <- add F1, 0x00A5
+
+	  utilizando un único registro (dos, si es necesario cargar de memo-
+	  ria, no estoy seguro).
+
+
+	- Por último, el producto k·C se puede realizar, al igual que la suma
+	  de A y B, cargando los datos que más optimicen el cálculo.
