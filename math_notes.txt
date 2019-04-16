@@ -19,6 +19,13 @@ Por tanto:
 	  la columna j-ésima de B. Así, se pueden calcular los elementos de
 	  L 'de uno en uno', cargando únicamente una columna de A y una fila
 	  de B.
+	    A este respecto, nótese que el número de productos a realizar es,
+	  sin alternativas, 81. Ahora bien, cada elemento aij (o bij) aparece
+	  en tres productos. Por lo tanto, el límite de la optimización pasa
+	  por reutilizar tres veces la carga de cada elemento de estas matrices.
+	  Después, dado que en general cada producto es único, las sumas son,
+	  necesariamente, 18. (I.e., sólo se pueden optimizar las cargas de
+	  datos).            
 
 	- Por su parte, la suma de matrices A + B se puede hacer, también,
 	  componente a componente, para obtener la matriz W = ( wij ) tal
@@ -105,6 +112,77 @@ Por tanto:
 	  utilizando un único registro (dos, si es necesario cargar de memo-
 	  ria, no estoy seguro).
 
-
 	- Por último, el producto k·C se puede realizar, al igual que la suma
 	  de A y B, cargando los datos que más optimicen el cálculo.
+	  
+Teniendo en cuenta, por otra parte, que la duración de las operaciones en DLX
+es la siguiente:
+
+    - Branches/Stores: 4 cycles
+    
+    - Integer ops: 5 cycles (IF, ID, EX, MEM, WB)
+    
+    - Flops (diferentes unidades funcionales para diferentes operaciones)
+        
+        + Ld/st (in integer ALU) ... 1 EX cycle (IF, ID, EX, MEM, WB)
+        
+        + Add ...................... 4 EX cycles (IF, ID, A1, ..., A4, MEM, WB)
+        
+        + Mul ...................... 7 EX cycles (IF, ID, M1, ..., M7, MEM, WB)
+        
+        + Div ..................... 25 EX cycles (IF, ID, D1, ..., D25, MEM, WB)
+        
+Tenemos los siguientes resultados:
+
+    Operaciones a realizar
+      |
+      |--> A + B: 18 loads, 9 sumas en FP = 18 * 5 ciclos + 9 * 8 ciclos
+      |      |
+      |      |    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+      |      |    .                                                           .
+      |      |--> . |A + B| (optimizado como se indica arriba):               .
+      |           .                                                           .
+      |           . 3ld   2ld   2ld   2ld  2ld  2ld                           .
+      |           .  v     v     v     v    v    v                            .
+      |           .  S1,   S5,   S3,   S6,  S2,  S4                           .
+      |           .                                                           .
+      |           . 13 loads, 12 multiplicaciones                             .
+      |           . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+      |             |                          = 13 * 5 ciclos + 12 * 11 ciclos
+      |             |
+      |             |--> 1/|A + B|: 1 load, 1 division = 1 * 5 ciclos
+      |                     |                          + 1 * 25 ciclos
+      |                     |
+      |                     |
+      |                     v
+      |                     ----> 1/| A + B | * (A x B): 10 loads, 9 mult =
+      |                     î
+      |                     |         10 * 5 ciclos + 9 * 11 ciclos
+      |                     |
+      |                     |
+      |                     |
+      |                     |
+      |--> A x B: N loads, (3 mul + 2 sumas) por cada fila y columna = 
+      |
+      |        N * 5 ciclos (loads)
+      |        + 2 * 27 * 8 ciclos (sumas)
+      |        + 3 * 27 * 11 ciclos (multiplicaciones)
+      |        
+      |--> k*C: 10 loads, 9 multiplicaciones = 10 * 5 ciclos + 9 * 11 ciclos
+      
+----> [1/|A + B| * (A x B)] + [k*C] = 18 loads, 9 sumas = 18 * 5 ciclos
+                                                        + 9 * 8 ciclos
+                                                        
+Por tanto, tentativamente, tenemos la siguiente jerarquía de operaciones (de
+más larga a más corta):
+
+    1. A x B = 1143 ciclos
+    
+    2. A + B = 162 ciclos           --|
+        - | A + B | = 197 ciclos      | = 389 ciclos
+            + 1/|A + B| = 30 ciclos --|
+            
+    3. k·C y 1/|A+B|·(AxB) = 149 ciclos
+    
+No obstante falta pensar, porque el cálculo de la suma y el determinante y/o
+la suma y el producto vectorial prodrían resultar combinables.
