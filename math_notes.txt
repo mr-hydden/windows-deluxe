@@ -126,17 +126,17 @@ es la siguiente:
         
         + Ld/st (in integer ALU) ... 1 EX cycle (IF, ID, EX, MEM, WB)
         
-        + Add ...................... 4 EX cycles (IF, ID, A1, ..., A4, MEM, WB)
+        + Add ...................... 2 EX cycles (IF, ID, A1, A2, MEM, WB)
         
-        + Mul ...................... 7 EX cycles (IF, ID, M1, ..., M7, MEM, WB)
+        + Mul ...................... 5 EX cycles (IF, ID, M1, M2, M3, M4, M5, MEM, WB)
         
-        + Div ..................... 25 EX cycles (IF, ID, D1, ..., D25, MEM, WB)
+        + Div ..................... 19 EX cycles (IF, ID, D1, ..., D19, MEM, WB)
         
 Tenemos los siguientes resultados:
 
     Operaciones a realizar
       |
-      |--> A + B: 18 loads, 9 sumas en FP = 18 * 5 ciclos + 9 * 8 ciclos
+      |--> A + B: 18 loads, 9 sumas en FP = 18 * 5 ciclos + 9 * 6 ciclos
       |      |
       |      |    . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
       |      |    .                                                           .
@@ -148,16 +148,16 @@ Tenemos los siguientes resultados:
       |           .                                                           .
       |           . 13 loads, 12 multiplicaciones                             .
       |           . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-      |             |                          = 13 * 5 ciclos + 12 * 11 ciclos
+      |             |                          = 13 * 5 ciclos + 12 * 9 ciclos
       |             |
       |             |--> 1/|A + B|: 1 load, 1 division = 1 * 5 ciclos
-      |                     |                          + 1 * 25 ciclos
+      |                     |                          + 1 * 23 ciclos
       |                     |
       |                     |
       |                     v
       |                     ----> 1/| A + B | * (A x B): 10 loads, 9 mult =
       |                     î
-      |                     |         10 * 5 ciclos + 9 * 11 ciclos
+      |                     |         10 * 5 ciclos + 9 * 9 ciclos
       |                     |
       |                     |
       |                     |
@@ -165,24 +165,24 @@ Tenemos los siguientes resultados:
       |--> A x B: N loads, (3 mul + 2 sumas) por cada fila y columna = 
       |
       |        N * 5 ciclos (loads)
-      |        + 2 * 27 * 8 ciclos (sumas)
-      |        + 3 * 27 * 11 ciclos (multiplicaciones)
+      |        + 2 * 27 * 6 ciclos (sumas)
+      |        + 3 * 27 * 9 ciclos (multiplicaciones)
       |        
-      |--> k*C: 10 loads, 9 multiplicaciones = 10 * 5 ciclos + 9 * 11 ciclos
+      |--> k*C: 10 loads, 9 multiplicaciones = 10 * 5 ciclos + 9 * 9 ciclos
       
 ----> [1/|A + B| * (A x B)] + [k*C] = 18 loads, 9 sumas = 18 * 5 ciclos
-                                                        + 9 * 8 ciclos
+                                                        + 9 * 6 ciclos
                                                         
 Por tanto, tentativamente, tenemos la siguiente jerarquía de operaciones (de
-más larga a más corta):
+más larga a más corta, sin contabilizar las cargas):
 
-    1. A x B = 1143 ciclos
+    1. A x B >= 1053 ciclos
     
-    2. A + B = 162 ciclos           --|
-        - | A + B | = 197 ciclos      | = 389 ciclos
-            + 1/|A + B| = 30 ciclos --|
+    2. A + B = 54 ciclos            --|
+        - | A + B | = 108 ciclos      | >= 185 ciclos
+            + 1/|A + B| = 23 ciclos --|
             
-    3. k·C y 1/|A+B|·(AxB) = 149 ciclos
+    3. k·C y 1/|A+B|·(AxB) = 81 ciclos
     
 No obstante falta pensar, porque el cálculo de la suma y el determinante y/o
 la suma y el producto vectorial prodrían resultar combinables.
