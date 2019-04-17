@@ -62,8 +62,6 @@ M:		.float		0,		0,		0
 ;---------------------------------------------------;
 				; Espacio de código
 
-
-
 				.global main
 main:
 	;------------- LOADING MATRIX -------------;
@@ -118,10 +116,6 @@ main:
 	addf	f18,f27,f28 ; Now we allocate the result in the first position of matrix M (f9)
 	addf	f18,f18,f29 ; Result
 
-	multf	f27,f27,f31 ; Empty registers f27..29 with register f31 content which is 0.0 (THIS IS JUST FOR DEBUGGING)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-	multf	f28,f28,f31
-	multf	f29,f29,f31
-
 	; First row of A * Second Column of B >>>>>>>>>>>>> M(1,2)
 
 	multf	f27,f0,f10
@@ -130,10 +124,6 @@ main:
 
 	addf	f19,f27,f28 
 	addf	f19,f19,f29 ; Result  
-
-	multf	f27,f27,f31    
-	multf	f28,f28,f31
-	multf	f29,f29,f31
 
 	; First row of A * Third Column of B >>>>>>>>>>>>> M(1,3)
 
@@ -144,10 +134,6 @@ main:
 	addf	f20,f27,f28 
 	addf	f20,f20,f29 ; Result 
 
-	multf	f27,f27,f31   
-	multf	f28,f28,f31
-	multf	f29,f29,f31
-
 	; Second row of A * First Column of B >>>>>>>>>>>>> M(2,1)
 
 	multf	f27,f3,f9
@@ -156,10 +142,6 @@ main:
 
 	addf	f21,f27,f28 
 	addf	f21,f21,f29 ; Result
-
-	multf	f27,f27,f31 
-	multf	f28,f28,f31
-	multf	f29,f29,f31
 
 	; Second row of A * Second Column of B >>>>>>>>>>>>> M(2,2)
 
@@ -170,10 +152,6 @@ main:
 	addf	f22,f27,f28 
 	addf	f22,f22,f29 ; Result
 
-	multf	f27,f27,f31    
-	multf	f28,f28,f31
-	multf	f29,f29,f31
-
 	; Second row of A * Third Column of B >>>>>>>>>>>>> M(2,3)
 
 	multf	f27,f3,f11
@@ -182,10 +160,6 @@ main:
 
 	addf	f23,f27,f28 
 	addf	f23,f23,f29 ; Result
-
-	multf	f27,f27,f31   
-	multf	f28,f28,f31
-	multf	f29,f29,f31
 
 	; Third row of A * First Column of B >>>>>>>>>>>>> M(3,1)
 
@@ -196,10 +170,6 @@ main:
 	addf	f24,f27,f28 
 	addf	f24,f24,f29 ; Result
 
-	multf	f27,f27,f31 
-	multf	f28,f28,f31
-	multf	f29,f29,f31
-
 	; Third row of A * Second Column of B >>>>>>>>>>>>> M(3,2)
 
 	multf	f27,f6,f10
@@ -209,10 +179,6 @@ main:
 	addf	f25,f27,f28 
 	addf	f25,f25,f29 ; Result 
 
-	multf	f27,f27,f31    
-	multf	f28,f28,f31
-	multf	f29,f29,f31
-
 	; Third row of A * Third Column of B >>>>>>>>>>>>> M(3,3)
 
 	multf	f27,f6,f11
@@ -221,10 +187,6 @@ main:
 
 	addf	f26,f27,f28 
 	addf	f26,f26,f29 ; Result 
-
-	multf	f27,f27,f31   
-	multf	f28,f28,f31
-	multf	f29,f29,f31
 
 	;-------------------------------------------- (A + B) --------------------------------------------;
 
@@ -305,27 +267,6 @@ main:
 	addf	f0,f1,f2
 	addf	f0,f0,f3
 
-	; Empty the rest of registers for matrix A and B execpt f0 that has the result (THIS IS JUST FOR DEBUGGING)<<<<<<<<<<<<<<<
-
-	multf	f1,f1,f31
-	multf	f2,f2,f31
-	multf	f3,f3,f31
-	multf	f4,f4,f31
-	multf	f5,f5,f31
-	multf	f6,f6,f31
-	multf	f7,f7,f31
-	multf	f8,f8,f31
-	multf	f9,f9,f31
-
-	multf	f10,f10,f31
-	multf	f11,f11,f31
-	multf	f12,f12,f31
-	multf	f13,f13,f31
-	multf	f14,f14,f31
-	multf	f15,f15,f31
-	multf	f16,f16,f31
-	multf	f17,f17,f31
-
 	;-------------------------------------------- 1/|Result(A + B)| --------------------------------------------;
 
 	; This instruction puts a bit 1 if both registers have the same content or bit 0 if not in FPSR register
@@ -403,31 +344,6 @@ main:
 	addf	f6,f24,f15
 	addf	f7,f25,f16
 	addf	f8,f26,f17
-
-	; Empty the rest of registers  (THIS IS JUST FOR DEBUGGING)<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-	multf	f9,f9,f31
-	multf	f10,f10,f31
-	multf	f11,f11,f31
-	multf	f12,f12,f31
-	multf	f13,f13,f31
-	multf	f14,f14,f31
-	multf	f15,f15,f31
-	multf	f16,f16,f31
-	multf	f17,f17,f31
-	multf	f18,f18,f31
-	multf	f19,f19,f31
-	multf	f20,f20,f31
-	multf	f21,f21,f31
-	multf	f22,f22,f31
-	multf	f23,f23,f31
-	multf	f24,f24,f31
-	multf	f25,f25,f31
-	multf	f26,f26,f31
-	multf	f27,f27,f31
-	multf	f28,f28,f31
-	multf	f29,f29,f31
-	multf	f30,f30,f31
 	
 end:
 	trap 0 ; End of the fucking world :D
