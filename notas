@@ -1,0 +1,43 @@
+F15 <- load (a11): | IF | ID | EX | ME | WB |
+F16 <- load (b11):      | IF | ID | EX | ME | WB |
+F0  <- F15 * F16 :           | IF | ID | ** | M1 | M2 | M3 | M4 | M5 | ME | WB |
+F17 <- load (b12):                | IF | ** | ID | EX | ME | WB |
+F9 <- F15 + F16  :                          | IF | ID | A1 | A2 | ME | WB |
+F13 <- movf (F9):                                | IF | ID | ** | EX | ** | ME | WB |
+F18 <- load (a12):                                    | IF | ** | ID | ** | EX | ME | WB |
+F1  <- F15 * F17 :                                              | IF | ** | ID | M1 | M2 | M3 | M4 | M5 | ME | WB |
+
+================================================================================
+
+F13 <- movf (F9) : | EX | ** | ME | WB |
+F18 <- load (a12): | ID | ** | EX | ME | WB |
+F1  <- F15 * F17 : | IF | ** | ID | M1 | M2 | M3 | M4 | M5 | ME | WB |
+
+F19 <- load (a21):           | IF | ID | EX | ME | WB |
+F11 <- F17 + F18 :                | IF | ID | A1 | A2 | ME | WB |
+F20 <- load (b13):                     | IF | ID | EX | ** | ** | ME | WB |
+F3  <- F16 * F19 :                          | IF | ID | ** | M1 | M2 | M3 | M4 | M5 | ME | WB |
+F21 <- load (a31):                               | IF | ** | ID | EX | ME | WB |
+F22 <- load (b21):                                         | IF | ID | EX | ME | WB |
+F14 <- movf(F11) :                                              | IF | ID | EX | ME | WB |
+F10 <- F19 + F22 :                                                   | IF | ID | A1 | A2 | ME | WB |
+
+================================================================================
+
+F3  <- F16 * F19 : | M3 | M4 | M5 | ME | WB |
+F21 <- load (a31): | ME | WB |
+F22 <- load (b21): | EX | ME | WB |
+F14 <- movf(F11) : | ID | EX | ME | WB |
+F10 <- F19 + F22 : | IF | ID | A1 | A2 | ME | WB |
+
+=================
+NEXT TMP -> F23
+
+F15: a11
+F16: b11
+F17: b12
+F18: a12
+F19: a21
+F20: b13
+F21: a31
+F22: b21
