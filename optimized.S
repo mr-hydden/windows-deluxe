@@ -100,5 +100,6 @@ main:
     movf        f14,f11
     
     addf        f10,f19,f21     ; a21 + b21
+    multf        f2,f15,f20     ; a11 * b13 -> F15 not needed anymore
 	
 	trap 0
