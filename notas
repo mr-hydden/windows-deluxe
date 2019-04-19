@@ -34,20 +34,27 @@ F23 <- load (b22):           | IF | ID | EX | ME | WB |
 F24 <- load (a13):                | IF | ID | EX | ME | WB |
 F25 <- load (b31):                     | IF | ID | EX | ME | WB |
 F12 <- F20 + F24 :                          | IF | ID | A1 | A2 | ME | WB |
-F14 <- F10 * F14 :                               | IF | ID | M1 | M2 | M3 | M4 | M5 | ME | WB |
+F14 <- F10 * F14 :                               | IF | ID | M1 | M2 | M3 | M4 | M5 | ** | ME | WB | < No veo solución
 F0  <-  F0 + F31 :                                    | IF | ID | A1 | A2 | ME | WB |
+F26 <- load (a22):                                         | IF | ID | EX | ** | ME | WB |
+F31 <- F21 + F25 :                                              | IF | ID | A1 | A2 | ME | WB |
 
-TODO: load a13 or b31 (we cannot ADDF otherwise)
-    - Better a13, so that we can still use F12 to store it
-NOTE: after a13 + b13, we can't help but start multiplying in |A+B|. For that
-      purpose, use F31 to store temporary sums before multiplying
-          Plus, we must calculate a12*b21 to sum with a11*b11 while multiplying
-      whatever we choose in |A+B|
+================================================================================
+
+F14 <- F10 * F14 : | M2 | M3 | M4 | M5 | ** | ME | WB |
+F0  <-  F0 + F31 : | A1 | A2 | ME | WB |
+F26 <- load (a22): | ID | EX | ** | ME | WB |
+F31 <- F21 + F25 : | IF | ID | A1 | A2 | ME | WB |
+
+F2  <- F15 * F20 :      | IF | ID | ** | ** | M1 | M2 | M3 | M4 | M5 | ME | WB | < No veo mejor solución
+F27 <- load (a33):           | IF | ** | ** | ID | EX | ME | WB |
+F30 <- F23 + F26 :                          | IF | ID | A1 | A2 | ME | WB |
+F28 <- load (b33):                               | IF | ID | EX | ** | ME | WB | 
 
 =================
-NEXT TMP_I -> F26
+NEXT TMP_I -> F27
 
-NEXT TMP_F -> F30
+TMP_F -> F29, F30, F31
 
 F15: a11
 F16: b11
@@ -60,3 +67,4 @@ F22: b21
 F23: b22
 F24: a13
 F25: b31
+F26: a22

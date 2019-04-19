@@ -110,5 +110,11 @@ main:
     multf       f14,f10,f14     ; (a12 + b12) * (a21 + b21)
     
     addf          f0,f0,f31     ; a11b11 + a12b21
+    
+    lf          f26,A+16        ; a22
+    
+    addf        f31,f21,f25     ; a31 + b31
+    multf        f2,f15,f20     ; a11 * b13
+    addf        f30,f23,f26     ; b22 + a22
 	
 	trap 0
