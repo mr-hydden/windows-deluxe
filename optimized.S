@@ -99,7 +99,16 @@ main:
     lf          f22,B+12        ; b21
     movf        f14,f11
     
-    addf        f10,f19,f21     ; a21 + b21
-    multf        f2,f15,f20     ; a11 * b13 -> F15 not needed anymore
+    addf        f10,f19,f22     ; a21 + b21
+    multf       f31,f18,f22     ; a12 * b21 -> Can add in F0
+    
+    lf          f23,B+16        ; b22
+    lf          f24,A+8         ; a13
+    lf          f25,B+24        ; b31
+    
+    addf        f12,f20,f24     ; a13 + b13
+    multf       f14,f10,f14     ; (a12 + b12) * (a21 + b21)
+    
+    addf          f0,f0,f31     ; a11b11 + a12b21
 	
 	trap 0
