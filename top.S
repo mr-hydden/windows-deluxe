@@ -135,20 +135,37 @@ main:
     multf        f6,f17,f24     ; a31 * b11
     
     lf          f15,B+32        ; b33
-    sf          AplusB+28,F31   ; store (a32 + b32)
+    sf          AplusB+28,F31   ; store(a32 + b32)
+	
+	addf        f31,f15,f30     ; a33 + b33
+    multf       f10,f16,f19     ; a12 * b22
+	
+	sf          AplusB+32,F31   ; store(a33 + b33)
+	
+	addf        f0,f0,f9        ; a11·b11 + a12·b21
+	multf       f11,f19,f27     ; a12·b23
+	addf        f1,f1,f10       ; a11·b12 + a12·b22
+	multf       f9,f23,f26      ; a22 * b21
+	addf        f2,f2,f11       ; a11·b13 + a12·b23
+	multf       f10,f16,f26     ; a22 * b22
+	addf        f3,f3,f9        ; a21·b11 + a22·b21
+	multf       f11,f26,f27     ; a22 * b23
+	addf        f4,f4,f10       ; a21·b12 + a22·b22
+	multf       f9,f23,f28      ; a32 * b21
+	addf        f5,f5,f11       ; a21·b13 + a22·b23
+	multf       f10,f21,f29     ; a13 * b32
+	lf          f17,AplusB
+	lf          f19,AplusB+4
+	lf          f26,AplusB+8
+	lf          f23,AplusB+12
+	addf        f6,f6,f9        ; a31·b11 + a32·b21
+	multf       f12,f21,f25     ; a13 * b31 ; <<<<<<<<<<<<<<<<<<<<<< F12 because all other are busy
+	
+	; REPENSAR CUANDO LLEGAMOS AL ELEMENTO 31 (de AxB)
+	
+	trap 0
     
     ;; EVERYTHING CLEAN UP TO HERE
-    
-    addf        f31,f15,f30     ; a33 + b33
-    multf       f10,f16,f19     ; a12 * b22
-    
-    sf          AplusB+32,F31   ; a33 + b33
-    
-    multf       f9,f16,f19     ; a12 * b22
-    multf       f10,f16,f19     ; a12 * b22
-    multf       f10,f16,f19     ; a12 * b22
-    multf       f10,f16,f19     ; a12 * b22
-    multf       f10,f16,f19     ; a12 * b22
-    multf       f10,f16,f19     ; a12 * b22
-    
-    trap 0
+	
+	
+	
