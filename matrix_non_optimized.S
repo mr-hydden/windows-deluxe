@@ -344,7 +344,19 @@ main:
 	addf	f6,f24,f15
 	addf	f7,f25,f16
 	addf	f8,f26,f17
-	
+
+	;-------------------------------------------- Store into M --------------------------------------------;
+
+	sf M, f18
+	sf M+4, f19
+	sf M+8, f20
+	sf M+12, f21
+	sf M+16, f22
+	sf M+20, f23
+	sf M+24, f24
+	sf M+28, f25
+	sf M+32, f26
+
 end:
 	trap 0 ; End of the fucking world :D
 

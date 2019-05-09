@@ -89,7 +89,7 @@ main:
     lf          f19,A+4         ; a12
 	sf          AplusB,f31      ; store(a11 + b11)
     
-    multf        f1,f16,f18     ; a11 * b12
+    multf       f1,f16,f18     ; a11 * b12
     addf        f31,f18,f19     ; a12 + b12
     
     lf          f20,B+8         ; b13
