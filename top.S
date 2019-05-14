@@ -46,17 +46,17 @@ C:		.float		15.000000,		17.000000,		14.000000
 ; Float number alpha
 Alpha:	.float 		1.235
 
-; Matrix M
-M:		.float		0,		0,		0
-		.float		0,		0,		0
-		.float		0,		0,		0
+num:	.float		1.0
 
 ; A + B matrix
 AplusB: .float      0,      0,      0
         .float      0,      0,      0
         .float      0,      0,      0
 
-num:	.float		1.0
+; Matrix M
+M:		.float		0,		0,		0
+		.float		0,		0,		0
+		.float		0,		0,		0
 
 ;---------------------------------------------------;
 				; Fin Espacio de datos
@@ -244,24 +244,41 @@ main:
 	multf       f22,f15,f22     ; @*c31
 	multf       f23,f15,f23     ; @*c32
 	multf       f24,f15,f24     ; @*c33
+
 	multf       f0,f0,f31       ; Z*(A x B)11
 	multf       f1,f1,f31       ; Z*(A x B)12
 	addf        f0,f0,f16
+	sf          M, f0
+
 	multf       f2,f2,f31       ; Z*(A x B)13
 	addf        f1,f1,f17
+	sf          M+4, f1
+
 	multf       f3,f3,f31       ; Z*(A x B)21
 	addf        f2,f2,f18
+	sf          M+8, f2
+
 	multf       f4,f4,f31       ; Z*(A x B)22
 	addf        f3,f3,f19
+	sf          M+12, f3
+
 	multf       f5,f5,f31       ; Z*(A x B)23
 	addf        f4,f4,f20
+	sf          M+16, f4
+
 	multf       f6,f6,f31       ; Z*(A x B)31
 	addf        f5,f5,f21
+	sf          M+20, f5
+
 	multf       f7,f7,f31       ; Z*(A x B)32
 	addf        f6,f6,f22
+	sf          M+24, f6
+
 	multf       f8,f8,f31       ; Z*(A x B)33
 	addf        f7,f7,f23
+	sf          M+28, f7
+
 	addf        f8,f8,f24
-	
+	sf          M+32, f8
 		
 	trap 0
