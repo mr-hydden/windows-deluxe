@@ -46,12 +46,12 @@ C:		.float		15.000000,		17.000000,		14.000000
 ; Float number alpha
 Alpha:	.float 		1.235
 
-num:	.float		1.0
-
 ; Matrix M
 M:		.float		0,		0,		0
 		.float		0,		0,		0
 		.float		0,		0,		0
+
+num:	.float		1.0
 
 ;---------------------------------------------------;
 				; Fin Espacio de datos
