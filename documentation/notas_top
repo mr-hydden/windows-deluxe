@@ -1,0 +1,7 @@
+mXY <- store(F31) ........: | WB |
+F17 <- load(a11+b11) .....: | ME | WB |
+F31 <- a33 + b33 .........: | A1 | A2 | ME | WB |
+F10 <- a12 * b22 .........: | ID | M1 | M2 | M3 | M4 | M5 | ME | WB |
+F0  <- a11·b11 + a12·b21 .: | IF | ID | A1 | A2 | ME | WB |
+F31 <- a11+b11 * a22+b22 .:      | IF | ID | M1 | M2 | M3 | M4 | M5 | ME | WB |
+
